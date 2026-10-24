@@ -13,11 +13,13 @@ class Book extends Model
         'kode_buku',
         'judul',
         'pengarang',
+        'penerbit',
+        'tahun',
         'stok',
     ];
-    public function loans()
-{
-return $this->hasMany(Loan::class);
-}
 
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
 }
