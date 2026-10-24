@@ -8,10 +8,11 @@ use Illuminate\Http\Request;
 class BookController extends Controller
 {
     public function index(Request $request)
-   {
+{
     $books = Book::when($request->search, function ($query, $search) {
         $query->where(function ($q) use ($search) {
-            $q->where('judul', 'like', "%{$search}%")
+            $q->where('kode_buku', 'like', "%{$search}%")
+              ->orWhere('judul', 'like', "%{$search}%")
               ->orWhere('pengarang', 'like', "%{$search}%");
         });
     })
@@ -23,7 +24,7 @@ class BookController extends Controller
         'books' => $books,
         'search' => $request->search,
     ]);
-    }
+}
 
     public function create()
     {
