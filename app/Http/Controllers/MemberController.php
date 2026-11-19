@@ -14,7 +14,8 @@ class MemberController extends Controller
         $members = Member::when($request->search, function ($query, $search) {
             $query->where(function ($q) use ($search) {
                 $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('nis_nim', 'like', "%{$search}%");
+                  ->orWhere('nis_nim', 'like', "%{$search}%")
+                  ->orWhere('no_hp', 'like', "%{$search}%");
             });
         })
         ->latest()
@@ -39,9 +40,9 @@ class MemberController extends Controller
         $validated = $request->validate([
             'nama' => 'required|max:255',
             'nis_nim' => 'required|unique:members,nis_nim',
-            'no_hp' => 'nullable|max:20',
+            'no_hp' => 'nullable|regex:/^[0-9]{8,15}$/',
             'alamat' => 'nullable|max:255',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
         ]);
 
         if ($request->hasFile('foto')) {
@@ -75,24 +76,21 @@ class MemberController extends Controller
         $validated = $request->validate([
             'nama' => 'required|max:255',
             'nis_nim' => 'required|unique:members,nis_nim,' . $member->id,
-            'no_hp' => 'nullable|max:20',
+            'no_hp' => 'nullable|regex:/^[0-9]{8,15}$/',
             'alamat' => 'nullable|max:255',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
         ]);
 
-        // Jika ada foto baru, simpan foto tersebut
         if ($request->hasFile('foto')) {
             $fotoBaru = $request->file('foto')
                 ->store('members', 'public');
 
-            // Hapus foto lama setelah foto baru berhasil disimpan
             if ($member->foto) {
                 Storage::disk('public')->delete($member->foto);
             }
 
             $validated['foto'] = $fotoBaru;
         } else {
-            // Pertahankan foto lama jika tidak ada foto baru
             unset($validated['foto']);
         }
 
