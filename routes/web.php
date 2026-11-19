@@ -1,8 +1,8 @@
-
 <?php
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\MemberController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,6 +27,9 @@ Route::middleware('auth')->group(function () {
 
     // Route Resource untuk data buku
     Route::resource('books', BookController::class);
+
+    // Route Resource untuk data anggota
+    Route::resource('members', MemberController::class);
 });
 
 require __DIR__.'/auth.php';

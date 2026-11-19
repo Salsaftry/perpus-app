@@ -18,6 +18,10 @@ import { Link } from '@inertiajs/vue3'
             <Link href="/books" class="block hover:text-gray-300">
                 Data Buku
             </Link>
+
+            <Link href="/members" class="block hover:text-gray-300">
+                Data Anggota
+            </Link>
         </nav>
     </aside>
 </template>
